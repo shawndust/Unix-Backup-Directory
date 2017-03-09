@@ -13,7 +13,7 @@ alias tstamp='(date "+%Y%j%H%M%S")'
 #This is handy because many different aliases may need to get this
 #input from the user.  And each time this info is needed, simply
 #invoke the getname alias.
-alias getname='echo "Please provide a filename: "; read z1810459'
+alias getname='echo "Please provide a filename: "; read file'
 
 
 #The vfile alias calls getname, tests the user's input to see if it
@@ -23,7 +23,7 @@ alias getname='echo "Please provide a filename: "; read z1810459'
 #print an error to the screen and exit the alias with exit code 1.  If
 #it is a regular file, test if it is readable, if not, echo an error
 #and exit code 2.
-alias vfile='getname; ([ ! -f $z1810459 ] && (echo "Not a regular file") && exit 1) || ( [ ! -r $z1810459 ] && (echo "Cant read") && exit 2) '
+alias vfile='getname; ([ ! -f $file ] && (echo "Not a regular file") && exit 1) || ( [ ! -r $file ] && (echo "Cant read") && exit 2) '
 
 
 #The backup alias calls vfile for a valid file name, copies that name
@@ -34,7 +34,7 @@ alias vfile='getname; ([ ! -f $z1810459 ] && (echo "Not a regular file") && exit
 #Call vfile, remove any pathname from the beginning of that received
 #file.  Copy that string into a variable.  Then copy the value of that
 #variable into the backup directory.
-alias backup='vfile; filename1=`echo $z1810459|sed "s#^.*/##"`; cp -i $filename1 $HOME/Backup'
+alias backup='vfile; filename1=`echo $file|sed "s#^.*/##"`; cp -i $filename1 $HOME/Backup'
 
 
 #The Backup alias backs up a user-selected file into the Backup
@@ -44,7 +44,7 @@ alias backup='vfile; filename1=`echo $z1810459|sed "s#^.*/##"`; cp -i $filename1
 #file name, copy that into a variable, then copy a file named the
 #value of the variable into the Backup directory with the timestamp
 #appended at the end.
-alias Backup='vfile; filename=`echo $z1810459|sed "s#^.*/##"`; cp -i $filename "$HOME/Backup/$filename.`tstamp`"'
+alias Backup='vfile; filename=`echo $file|sed "s#^.*/##"`; cp -i $filename "$HOME/Backup/$filename.`tstamp`"'
 
 
 #The finder alias searches for a file based on the user's request.
