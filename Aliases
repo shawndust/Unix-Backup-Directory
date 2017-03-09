@@ -1,0 +1,58 @@
+#The tstamp alias returns the current time as a string of
+#digits representing the current time.  The year, day-of-year
+#hour, minute, and second at run-time.
+
+#This alias calls the date command with the variables for year,
+#day-of-year, hour, minute, second, and outputs them when called.
+alias tstamp='(date "+%Y%j%H%M%S")'
+
+
+#The getname alias prompts the user to provide a filename which is
+#read into a variable.
+
+#This is handy because many different aliases may need to get this
+#input from the user.  And each time this info is needed, simply
+#invoke the getname alias.
+alias getname='echo "Please provide a filename: "; read z1810459'
+
+
+#The vfile alias calls getname, tests the user's input to see if it
+#is a regular file and if it is readable.
+
+#First, test if the file is a regular file with -f.  If it's not, then
+#print an error to the screen and exit the alias with exit code 1.  If
+#it is a regular file, test if it is readable, if not, echo an error
+#and exit code 2.
+alias vfile='getname; ([ ! -f $z1810459 ] && (echo "Not a regular file") && exit 1) || ( [ ! -r $z1810459 ] && (echo "Cant read") && exit 2) '
+
+
+#The backup alias calls vfile for a valid file name, copies that name
+#into a backup folder, and if another file has the same name, it asks
+#permission before overwriting.  It even works if a path is provided
+#before the file name.
+
+#Call vfile, remove any pathname from the beginning of that received
+#file.  Copy that string into a variable.  Then copy the value of that
+#variable into the backup directory.
+alias backup='vfile; filename1=`echo $z1810459|sed "s#^.*/##"`; cp -i $filename1 $HOME/Backup'
+
+
+#The Backup alias backs up a user-selected file into the Backup
+#directory and appends the timestamp onto the end of the filename.
+
+#Call vfile to get a valid file. Strip out any path name before the
+#file name, copy that into a variable, then copy a file named the
+#value of the variable into the Backup directory with the timestamp
+#appended at the end.
+alias Backup='vfile; filename=`echo $z1810459|sed "s#^.*/##"`; cp -i $filename "$HOME/Backup/$filename.`tstamp`"'
+
+
+#The finder alias searches for a file based on the user's request.
+#First, it asks for the file directory, then the file name.
+
+#First, prompt the user to input the search directory. Read this
+#input into a variable. Then, prompt the user for the file name
+#to be found, and read that into a variable. Then, use the find
+#command to determine whether the requested folder contains the
+#requested file.
+alias finder='echo "Which directory would you like to search?"; read search_dir 2>/dev/null; echo "Which file would you like to find"; read search_file; find $search_dir $search_file 2>/dev/null'
